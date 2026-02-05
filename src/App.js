@@ -7,6 +7,8 @@ import PatientList from './Pages/PatientList';
 import PatientForm from'./Pages/PatientForm';
 import DoctorForm from './Pages/DoctorForm';
 import DoctorList from './Pages/DoctorList';
+import AppointmentForm from './Pages/AppointmentForm';
+import AppointmentList from'./Pages/AppointmentList';
 function App() {
   return (
     <BrowserRouter>
@@ -24,6 +26,11 @@ function App() {
       <Route path='/doctors' element={<DoctorList/>}></Route>
       <Route path='/doctors/add' element={<DoctorForm/>}></Route>
       <Route path='/doctors/edit/:id' element={<DoctorForm/>}></Route>
+
+
+      <Route path='/appointments' element={<AppointmentList/>}></Route>
+      <Route path='/appointments/book' element={<AppointmentForm/>}></Route>
+      <Route path='/appointments/edit/:id' element={<AppointmentForm/>}></Route>
 
 
     </Routes>
