@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react'
-import{data, useNavigate,useParams} from'react-router-dom';
+import{ useNavigate,useParams} from'react-router-dom';
 import appointmentService from'../Services/appointmentService';
 import patientService from'../Services/patientService';
 import doctorService from'../Services/doctorService';
@@ -65,7 +65,7 @@ const { id } = useParams();
         if (isEditMode) {
             fetchAppointment();
         }
-    }, [id]);
+    }, [isEditMode]);
 
     const fetchPatientsAndDoctors = async () => {
         try {

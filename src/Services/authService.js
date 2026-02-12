@@ -2,8 +2,9 @@ import api from './api';
 
 const authService = {
     login: async (credentials) => {
-        const  response = await api.get('/patients');
+       await api.get('/patients');
         return { success: true, user: { name: 'User' } };
+    
     },
 
     register: async (userData) => {

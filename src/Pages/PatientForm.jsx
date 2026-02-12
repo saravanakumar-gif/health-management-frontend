@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import patientService from'../Services/patientService';
 import'../Styles/PatientForm.css';
 
@@ -130,7 +130,7 @@ const PatientForm = () => {
                 </div>
 
                 <div className='form-actions'>
-                    <button type='button' className='btn-cancel' onClick={()=>Navigate('/patients')}>cancel</button>
+                    <button type='button' className='btn-cancel' onClick={()=>navigate('/patients')}>cancel</button>
                     <button type='submit' className='btn-submit' disabled={loading}>{loading ?'Saving...':isEditMode ?'Update Patient':'Add Patient'}</button>
                 </div>
 

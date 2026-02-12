@@ -1,5 +1,5 @@
-
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import './App.css';
 import Register from './Pages/Register';
 import Dashboard from './Pages/Dashboard';
 import Login from './Pages/Login';
@@ -31,9 +31,11 @@ function App() {
       <Route path='/appointments' element={<AppointmentList/>}></Route>
       <Route path='/appointments/book' element={<AppointmentForm/>}></Route>
       <Route path='/appointments/edit/:id' element={<AppointmentForm/>}></Route>
-    </Routes>  
+
+    </Routes>
+      
     </BrowserRouter>
-    );
+  );
 }
 
 export default App;
