@@ -1,27 +1,4 @@
-<<<<<<< HEAD
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-=======
-import './App.css';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Register from './Pages/Register';
 import Dashboard from './Pages/Dashboard';
@@ -54,13 +31,9 @@ function App() {
       <Route path='/appointments' element={<AppointmentList/>}></Route>
       <Route path='/appointments/book' element={<AppointmentForm/>}></Route>
       <Route path='/appointments/edit/:id' element={<AppointmentForm/>}></Route>
-
-
-    </Routes>
-      
+    </Routes>  
     </BrowserRouter>
->>>>>>> a2e65dde3f7fa0653cb823605088f35908b2045f
-  );
+    );
 }
 
 export default App;
