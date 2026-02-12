@@ -13,6 +13,7 @@ const DoctorForm = () => {
   const[formData,setFormData]=useState({
     name:'',
     specialization:'',
+    qualification:'',
     experience:'',
     phone:'',
     email:'',
@@ -80,7 +81,7 @@ const DoctorForm = () => {
             await doctorService.updateDoctor(id,formData);
             alert('Doctor updated successfully!');
         }else{
-            await doctorService.createDoctor(id, formData);
+            await doctorService.createDoctor(formData);
             alert('Doctor created successfully!')
         }
         navigate('/doctors');

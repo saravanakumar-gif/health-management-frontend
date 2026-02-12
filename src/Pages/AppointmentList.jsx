@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import appointmentService from'../Services/appointmentService';
-import patientService from'../Services/patientService';
-import doctorService from'../Services/doctorService';
-import'../Styles/AppointmentList.css';
+import appointmentService from '../Services/appointmentService';
+import patientService from '../Services/patientService';
+import doctorService from '../Services/doctorService';
+import '../Styles/AppointmentList.css';
+
 function AppointmentList() {
     const [appointments, setAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -82,6 +82,7 @@ function AppointmentList() {
             fetchInitialData(); 
             alert('Status updated successfully!');
         } catch (err) {
+            console.log("Error response:", err.response?.data);
             alert('Failed to update status');
             console.error(err);
         }

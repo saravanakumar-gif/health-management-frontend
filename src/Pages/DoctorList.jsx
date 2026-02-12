@@ -43,21 +43,20 @@ const DoctorList = () => {
         }
     };
 
-    const specializations = ['All', ...new Set(doctors.map(d => d.specialization))];
-    
-    const filteredDoctors=doctors.filter(doctor=>{
+     const specializations = ['All', ...new Set(doctors.map(d => d.specialization))];
 
-        const matchesSearch=doctor.name.toLowerCase().includes(searchTerm.toLowerCase())||
-        doctor.sepecialization.toLowerCase().includes(searchTerm.toLowerCase())||(doctor.phone&&doctor.phone.includes(searchTerm));
+    const filteredDoctors = doctors.filter(doctor => {
+        const matchesSearch = 
+            doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            doctor.specialization.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (doctor.phone && doctor.phone.includes(searchTerm));
+        
+        const matchesFilter = 
+            filterSpecialization === 'All' || 
+            doctor.specialization === filterSpecialization;
 
-
-       const matchesFilter= filterSpecialization==='All'||doctor.sepecialization===filterSpecialization;
-
-       return matchesSearch&&matchesFilter;
-
-
+        return matchesSearch && matchesFilter;
     });
-
 
 
 
@@ -75,13 +74,18 @@ const DoctorList = () => {
                 <input type="text" placeholder='Search by name, specialization, or phone...' value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
             </div>
 
-
-            <div className='filter-box'>
-                <label htmlFor="">Filter by Specialization:</label>
-                <select value={filterSpecialization} onChange={(e)=>setFilterSpecialization(e.target.value)}>
-                    {specializations.map(spec=>(<option key={spec} value={spec}>{spec}</option>))}
-                </select>
-            </div>
+            <div className="filter-box">
+                    <label>Filter by Specialization:</label>
+                    <select 
+                        value={filterSpecialization}
+                        onChange={(e) => setFilterSpecialization(e.target.value)}
+                    >
+                        {specializations.map(spec => (
+                            <option key={spec} value={spec}>{spec}</option>
+                        ))}
+                    </select>
+                </div>
+           
         </div>
 
         {loading&&<div className='loading'>Loading doctors...</div>}

@@ -21,30 +21,34 @@ const Dashboard = () => {
         fetchStats();
     },[]);
 
-    const fetchStats=async ()=>{
-        try{
-            const[patients,doctors,appointments]=await Promise.all([
-                patientService.getAllPatients(),
-                doctorService.getAllDoctors(),
-                appointmentService.getAllAppointments()
-            ]);
-            const today=new Date().toISOString().split('T')[0];
-            const todayAppts=appointments.filter(
-                apt=>apt.appointmentDate===today
-            );
-            setStats({
-                totalPatients:patients.length,
-                totalDoctors:doctors.length,
-                todayAppointments:appointments.length,
-                totalAppointments:todayAppts.length
+    const fetchStats = async () => {
+    try {
+        const [patients, doctors, appointments] = await Promise.all([
+            patientService.getAllPatients(),
+            doctorService.getAllDoctors(),
+            appointmentService.getAllAppointments()
+        ]);
 
-            })
-        } catch (err){
-            console.error('Failed to fetch stats:',err);
-        }finally{
-            setLoading(false);
-        }
+        const today = new Date().toISOString().split('T')[0];
+
+        const todayAppts = appointments.filter(
+            apt => apt.appointmentDate === today
+        );
+
+        setStats({
+            totalPatients: patients.length,
+            totalDoctors: doctors.length,
+            totalAppointments: appointments.length,
+            todayAppointments: todayAppts.length
+        });
+
+    } catch (err) {
+        console.error('Failed to fetch stats:', err);
+    } finally {
+        setLoading(false);
     }
+};
+
     const handleLogout=()=>{
         localStorage.removeItem('user');
         navigate('/login');
