@@ -31,7 +31,7 @@ const DoctorList = () => {
     };
 
     const handleDelete=async (id)=>{
-        if(window.confirm('Are you sure you want to delete this doctro')){
+        if(window.confirm('Are you sure you want to delete this doctor')){
             try{
                 await doctorService.deleteDoctor(id);
                 fetchDoctors();
