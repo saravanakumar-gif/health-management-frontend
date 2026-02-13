@@ -5,47 +5,49 @@ import'../Styles/DoctorList.css';
 
 const DoctorList = () => {
 
-    const[doctors, setDoctors]=useState([]);
-    const[loading,setLoading]=useState(true);
-    const[error,setError]=useState('');
-    const[searchTerm,setSearchTerm]=useState('');
-    const[filterSpecialization,setFilterSpecialization]=useState('All');
-    const navigate=useNavigate();
+    const [doctors, setDoctors] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filterSpecialization, setFilterSpecialization] = useState('All');
+    const navigate = useNavigate();
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchDoctors();
-    },[]);
+    }, []);
 
-    const fetchDoctors=async()=>{
-        try{
+    const fetchDoctors = async () => {
+        try {
             setLoading(true);
-            const data =await doctorService.getAllDoctors();
+            const data = await doctorService.getAllDoctors();
             setDoctors(data);
             setError('');
-        }catch (err){
+        } catch (err) {
             setError('Failed to load doctors');
             console.error(err);
-        }finally{
+        } finally {
             setLoading(false);
         }
     };
 
-    const handleDelete=async (id)=>{
-        const doctor=doctors.find(d=>d.id===id);
-        if(window.confirm(`Are you sure you want to delete Dr. ${doctor?.name}? This will also delete all their appointments.`)){
-            try{
+    const handleDelete = async (id) => {
+    
+        const doctor = doctors.find(d => d.id === id);
+        
+        if (window.confirm(`Are you sure you want to delete Dr. ${doctor?.name}? This will also delete all their appointments.`)) {
+            try {
                 await doctorService.deleteDoctor(id);
-                fetchDoctors();
+                await fetchDoctors(); 
                 alert('Doctor and associated appointments deleted successfully!');
-            }catch (err){
+            } catch (err) {
                 const errorMessage = err.response?.data?.error || err.response?.data?.message || 'Failed to delete doctor';
-                alert('errorMessage');
+                alert(errorMessage);
                 console.error(err);
             }
         }
     };
 
-     const specializations = ['All', ...new Set(doctors.map(d => d.specialization))];
+    const specializations = ['All', ...new Set(doctors.map(d => d.specialization))];
 
     const filteredDoctors = doctors.filter(doctor => {
         const matchesSearch = 
@@ -60,23 +62,29 @@ const DoctorList = () => {
         return matchesSearch && matchesFilter;
     });
 
-
-
-  return (
-    <div className='doctor-list-container'>
-        <div className='page-header'>
-            <div>
-                <h1>Doctor Management</h1>
-                <p className='subtitle'>{Doctor.length} Doctors • {specializations.length-1} Specializations</p>
-            </div>
-            <button className='btn-add' onClick={()=>navigate('/doctors/add')}>+Add New Doctor</button>
-        </div>
-        <div className='filters-section'>
-            <div className='search-box'>
-                <input type="text" placeholder='Search by name, specialization, or phone...' value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
+    return (
+        <div className='doctor-list-container'>
+            <div className='page-header'>
+                <div>
+                    <h1>Doctor Management</h1>
+                    <p className='subtitle'>{doctors.length} Doctors • {specializations.length - 1} Specializations</p>
+                </div>
+                <button className='btn-add' onClick={() => navigate('/doctors/add')}>
+                    + Add New Doctor
+                </button>
             </div>
 
-            <div className="filter-box">
+            <div className='filters-section'>
+                <div className='search-box'>
+                    <input 
+                        type="text" 
+                        placeholder='Search by name, specialization, or phone...' 
+                        value={searchTerm} 
+                        onChange={(e) => setSearchTerm(e.target.value)} 
+                    />
+                </div>
+
+                <div className="filter-box">
                     <label>Filter by Specialization:</label>
                     <select 
                         value={filterSpecialization}
@@ -87,69 +95,82 @@ const DoctorList = () => {
                         ))}
                     </select>
                 </div>
-           
-        </div>
-
-        {loading&&<div className='loading'>Loading doctors...</div>}
-        {error&&<div className='error-message'>{error}</div>}
-
-        {!loading && !error &&(
-            <div className='doctors-grid'>
-                {filteredDoctors.length===0 ?(
-                    <div className='no-data'> <p>No doctors found</p></div>
-                ):(
-                    filteredDoctors.map(doctor=>(
-                        <div key={doctor.id} className='doctor-card'>
-                            <div className='doctor-header'>
-                                <div className='doctor-avatar'>
-                                    👨‍⚕️
-                                </div>
-                                <div className='doctor-info'>
-                                    <h3>{doctor.name}</h3>
-                                    <span className='specialization-badge'>
-                                        {doctor.specialization}
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div className='doctor-details'>
-                                <div className='detail-item'>
-                                    <span className='label'>Qualification:</span>
-                                    <span className='value'>{doctor.qualification||'N/A'}</span>
-                                </div>
-                                <div className='detail-item'>
-                                    <span className='label'>Phone:</span>
-                                    <span className='value'>{doctor.phone}</span>
-                                </div>
-
-                                <div className='detail-item'>
-                                    <span className='label'>Email:</span>
-                                    <span className='value'>{doctor.email||'N/A'}</span>
-                                </div>
-
-                                <div className='detail-item'>
-                                    <span className='label'>Consultation Fee:</span>
-                                    <span className='value fee'>₹{doctor.consultationFee || 0}</span>
-                                </div>
-                            </div>
-
-
-                            <div className='doctor-actions'>
-                                <button className='btn-edit' onClick={()=>navigate (`/doctors/edit/${doctor.id}`)}>Edit</button>
-                                <button className='btn-delete' onClick={()=>handleDelete(doctor.id)}>Delete</button>
-                            </div>
-
-                             </div>
-                    ))
-                )}
             </div>
-        )}
-        <div className='footer-actions'>
-            <button className='btn-back' onClick={()=>navigate('/dashboard')}>← Back to Dashboard</button>
-        </div>
 
-    </div>
-  )
+            {loading && <div className='loading'>Loading doctors...</div>}
+            {error && <div className='error-message'>{error}</div>}
+
+            {!loading && !error && (
+                <div className='doctors-grid'>
+                    {filteredDoctors.length === 0 ? (
+                        <div className='no-data'>
+                            <p>No doctors found</p>
+                        </div>
+                    ) : (
+                        filteredDoctors.map(doctor => (
+                            <div key={doctor.id} className='doctor-card'>
+                                <div className='doctor-header'>
+                                    <div className='doctor-avatar'>
+                                        👨‍⚕️
+                                    </div>
+                                    <div className='doctor-info'>
+                                        <h3>{doctor.name}</h3>
+                                        <span className='specialization-badge'>
+                                            {doctor.specialization}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className='doctor-details'>
+                                    <div className='detail-item'>
+                                        <span className='label'>Qualification:</span>
+                                        <span className='value'>{doctor.qualification || 'N/A'}</span>
+                                    </div>
+                                    <div className='detail-item'>
+                                        <span className='label'>Experience:</span>
+                                        <span className='value'>{doctor.experience || 0} years</span>
+                                    </div>
+                                    <div className='detail-item'>
+                                        <span className='label'>Phone:</span>
+                                        <span className='value'>{doctor.phone}</span>
+                                    </div>
+                                    <div className='detail-item'>
+                                        <span className='label'>Email:</span>
+                                        <span className='value'>{doctor.email || 'N/A'}</span>
+                                    </div>
+                                    <div className='detail-item'>
+                                        <span className='label'>Consultation Fee:</span>
+                                        <span className='value fee'>₹{doctor.consultationFee || 0}</span>
+                                    </div>
+                                </div>
+
+                                <div className='doctor-actions'>
+                                    <button 
+                                        className='btn-edit' 
+                                        onClick={() => navigate(`/doctors/edit/${doctor.id}`)}
+                                    >
+                                        Edit
+                                    </button>
+                                    <button 
+                                        className='btn-delete' 
+                                        onClick={() => handleDelete(doctor.id)}
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+            )}
+
+            <div className='footer-actions'>
+                <button className='btn-back' onClick={() => navigate('/dashboard')}>
+                    ← Back to Dashboard
+                </button>
+            </div>
+        </div>
+    );        
 }
 
 export default DoctorList
