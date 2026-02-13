@@ -31,13 +31,15 @@ const DoctorList = () => {
     };
 
     const handleDelete=async (id)=>{
-        if(window.confirm('Are you sure you want to delete this doctor')){
+        const doctor=doctors.find(d=>d.id===id);
+        if(window.confirm(`Are you sure you want to delete Dr. ${doctor?.name}? This will also delete all their appointments.`)){
             try{
                 await doctorService.deleteDoctor(id);
                 fetchDoctors();
-                alert('Doctor deleted successfully!');
+                alert('Doctor and associated appointments deleted successfully!');
             }catch (err){
-                alert('Failed to delete doctor');
+                const errorMessage = err.response?.data?.error || err.response?.data?.message || 'Failed to delete doctor';
+                alert('errorMessage');
                 console.error(err);
             }
         }
@@ -65,7 +67,7 @@ const DoctorList = () => {
         <div className='page-header'>
             <div>
                 <h1>Doctor Management</h1>
-                <p className='subtitle'>{DoctorList.length} Doctors • {specializations.length-1} Specializations</p>
+                <p className='subtitle'>{Doctor.length} Doctors • {specializations.length-1} Specializations</p>
             </div>
             <button className='btn-add' onClick={()=>navigate('/doctors/add')}>+Add New Doctor</button>
         </div>
@@ -105,7 +107,7 @@ const DoctorList = () => {
                                 <div className='doctor-info'>
                                     <h3>{doctor.name}</h3>
                                     <span className='specialization-badge'>
-                                        {doctor.sepecialization}
+                                        {doctor.specialization}
                                     </span>
                                 </div>
                             </div>
