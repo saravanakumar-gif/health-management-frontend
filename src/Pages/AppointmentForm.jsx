@@ -65,7 +65,7 @@ const { id } = useParams();
         if (isEditMode) {
             fetchAppointment();
         }
-    }, [isEditMode]);
+    }, [id,isEditMode]);
 
     const fetchPatientsAndDoctors = async () => {
         try {

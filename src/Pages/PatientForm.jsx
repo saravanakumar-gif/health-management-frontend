@@ -24,7 +24,7 @@ const PatientForm = () => {
         if(isEditMode){
             fetchPatient();
         }
-    },[id]);
+    },[id, isEditMode]);
 
     const fetchPatient=async ()=>{
         try{

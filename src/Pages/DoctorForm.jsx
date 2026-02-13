@@ -41,7 +41,7 @@ const DoctorForm = () => {
     if(isEditMode){
         fetchDoctor();
     }
-  },[id]);
+  },[id ,isEditMode]);
 
   const fetchDoctor=async()=>{
     try{
