@@ -1,11 +1,14 @@
 # Health Management Frontend
 #Purpose and Scope
+
 This document provides a high-level introduction to the health-management-frontend application, describing its purpose, architecture, and core functional areas. The application is a React-based single-page application (SPA) for managing healthcare operations including patient records, doctor profiles, and appointment scheduling.
 
 #Application Purpose
+
 The health-management-frontend is a web-based medical management system that provides a unified interface for healthcare facility operations. The application serves as the client-side component of a full-stack healthcare management solution, communicating with a backend API hosted on Railway.
 
 #Technology Stack
+
 The application is built using modern web development technologies centered around the React ecosystem:
 
 | Technology                | Version   | Purpose                              |
