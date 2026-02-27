@@ -1,70 +1,94 @@
-# Getting Started with Create React App
+# Health Management Frontend
+#Purpose and Scope
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This document provides a high-level introduction to the health-management-frontend application, describing its purpose, architecture, and core functional areas. The application is a React-based single-page application (SPA) for managing healthcare operations including patient records, doctor profiles, and appointment scheduling.
 
-## Available Scripts
+#Application Purpose
 
-In the project directory, you can run:
+The health-management-frontend is a web-based medical management system that provides a unified interface for healthcare facility operations. The application serves as the client-side component of a full-stack healthcare management solution, communicating with a backend API hosted on Railway.
 
-### `npm start`
+#Technology Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The application is built using modern web development technologies centered around the React ecosystem:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+| Technology                | Version   | Purpose                              |
+|---------------------------|-----------|--------------------------------------|
+| react                     | 19.2.3    | Core UI library                      |
+| react-dom                 | 19.2.3    | React rendering to DOM               |
+| react-router-dom          | 7.12.0    | Client-side routing                  |
+| axios                     | 1.13.2    | HTTP client for API communication    |
+| bootstrap                 | 5.3.8     | UI styling and components            |
+| react-scripts             | 5.0.1     | Build tooling and webpack config     |
+| @testing-library/react    | 16.3.2    | Component testing utilities          |
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+#Application Architecture Diagram
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+                                    ┌───────────────────────────────┐
+                                    │        Browser Environment    │
+                                    │                               │
+                                    │   index.html                  │
+                                    │     (Entry Point)             │
+                                    │                               │
+                                    └───────────────┬───────────────┘
+                                                    │
+                                                    ▼
+                                    ┌───────────────────────────────┐
+                                    │        React Mount Point      │
+                                    │          <div id="root">      │
+                                    └───────────────┬───────────────┘
+                                                    │
+                                                    ▼
+                          ┌───────────────────────────────────────┐
+                          │            React Application          │
+                          │                                       │
+                          │          App.js                       │
+                          │     • BrowserRouter                   │
+                          │     • Routes / Route configuration    │
+                          └───────────────────┬───────────────────┘
+                                              │
+                ┌─────────────────────────────┼─────────────────────────────┐
+                │                             │                             │
+    ┌───────────┴───────────┐     ┌───────────┴───────────┐     ┌───────────┴───────────┐
+    │     Public Pages      │     │    Protected Pages    │     │     Form Pages        │
+    │                       │     │                       │     │                       │
+    │  • Login              │     │  • Dashboard          │     │  • PatientForm        │
+    │  • Register           │     │  • PatientList        │     │  • DoctorForm         │
+    │                       │     │  • DoctorList         │     │  • AppointmentForm    │
+    └───────────┬───────────┘     └───────────┬───────────┘     └───────────┬───────────┘
+                │                             │                             │
+                └───────────────┬─────────────┼─────────────┬───────────────┘
+                                │             │             │
+                                ▼             ▼             ▼
+                    ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
+                    │   Service Layer │ │                 │ │                 │
+                    │                 │ │                 │ │                 │
+                    │  • authService  │ │  patientService │ │  doctorService  │
+                    │  • (login,      │ │  • (CRUD        │ │  • (CRUD        │
+                    │     register,   │ │     patients)   │ │     doctors)    │
+                    │     logout, etc)│ │                 │ │                 │
+                    └────────┬────────┘ └────────┬────────┘ └────────┬────────┘
+                             │                   │                   │
+                             └───────────┬───────┼───────────┬───────┘
+                                         │       │           │
+                                         ▼       ▼           ▼
+                               ┌───────────────────────────────────┐
+                               │            api.js                 │
+                               │     (Central Axios Instance)      │
+                               │  • baseURL                        │
+                               │  • interceptors (auth token, etc) │
+                               │  • request/response handling      │
+                               └───────────────────┬───────────────┘
+                                                   │
+                                                   ▼
+                                     ┌─────────────────────────────┐
+                                     │     Backend API             │
+                                     │  (Railway hosted)           │
+                                     │  health-management-backend  │
+                                     └─────────────────────────────┘
+                                     
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Backend:https://github.com/saravanakumar-gif/health-management-backend.git
+                                     
