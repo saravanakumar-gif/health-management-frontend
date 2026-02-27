@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'react-toastify';
 import patientService from'../Services/patientService';
 import'../Styles/PatientForm.css';
 
@@ -62,17 +63,17 @@ const PatientForm = () => {
         try{
             if(isEditMode){
                 await patientService.updatePatient(id,formData);
-                alert('Patient updated successfully!')
+                toast.success('Patient updated successfully!')
             }
             else{
                 await patientService.createPatient(formData);
-                alert('Patient created successfully!')
+                toast.success('Patient created successfully!')
             }
             navigate('/patients');
         }
         catch (err){
-            setError(err.response?.data?.error ||'Operation failed');
-            console.error(err);
+            toast.error(err.response?.data?.error ||'Operation failed');
+
         }
         finally{
             setLoading(false);

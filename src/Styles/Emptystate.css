@@ -1,0 +1,38 @@
+.empty-state{
+    text-align: center;
+    padding: 80px 20px;
+    background: white;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.empty-icon{
+    font-size: 80px;
+    margin-bottom: 20px;
+}
+
+.empty-state h3{
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.empty-state p{
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.empty-action-btn{
+    padding: 12px 24px;
+    background: linear-gradient(135deg,#667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.3s;
+}
+
+.empty-action-btn:hover{
+    transform: translateY(-2px);
+}

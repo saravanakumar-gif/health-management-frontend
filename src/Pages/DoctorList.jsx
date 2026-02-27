@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import{useNavigate}from'react-router-dom';
+import { toast } from 'react-toastify';
 import doctorService from'../Services/doctorService';
 import'../Styles/DoctorList.css';
+import ConfirmModal from '../Components/ConfirmModal';
 
 const DoctorList = () => {
 
@@ -10,6 +12,8 @@ const DoctorList = () => {
     const [error, setError] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [filterSpecialization, setFilterSpecialization] = useState('All');
+    const[showDeletModel,setShowDeleteModal]=useState(false);
+    const[doctorToDelete,setDoctorToDelete]=useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -46,6 +50,24 @@ const DoctorList = () => {
             }
         }
     };
+
+    const handleDeleteClick=(doctor)=>{
+        setDoctorToDelete(doctor);
+        setShowDeleteModal(true);
+    };
+
+    const confirmDelete=async()=>{
+        try{
+            await doctorService.deleteDoctor(doctorToDelete.id);
+            await fetchDoctors();
+            toast.success('Doctor deleted successfully!')
+        }catch(err){
+            toast.error('Failed to delete doctor')
+        }finally{
+            setShowDeleteModal(false);
+            setDoctorToDelete(null);
+        }
+    }
 
     const specializations = ['All', ...new Set(doctors.map(d => d.specialization))];
 
@@ -153,7 +175,7 @@ const DoctorList = () => {
                                     </button>
                                     <button 
                                         className='btn-delete' 
-                                        onClick={() => handleDelete(doctor.id)}
+                                        onClick={() => handleDeleteClick(doctor)}
                                     >
                                         Delete
                                     </button>
@@ -163,6 +185,8 @@ const DoctorList = () => {
                     )}
                 </div>
             )}
+            <ConfirmModal isOpen={showDeletModel} title="Delete Doctor" message={`Are you sure you want to delete Dr.${doctorToDelete?.name}? This will also delete all their appointments.`} 
+        onConfirm={confirmDelete} onCancel={()=>setShowDeleteModal(false)}/>
 
             <div className='footer-actions'>
                 <button className='btn-back' onClick={() => navigate('/dashboard')}>
