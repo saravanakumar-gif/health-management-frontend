@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://health-management-backend-production.up.railway.app/api';
+// Browser calls stay same-origin (e.g. Vercel → /api/... → Railway via vercel.json rewrite, or
+// CRA dev server proxy) so CORS is not required on the backend for the frontend origin.
+// Set REACT_APP_API_URL to the full Railway API URL only if you fix CORS on the backend instead.
+const API_BASE_URL =
+    process.env.REACT_APP_API_URL || '/api';
 
 const api = axios.create({
     baseURL: API_BASE_URL,

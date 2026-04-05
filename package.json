@@ -6,6 +6,8 @@
 
   "private": true,
 
+  "proxy": "https://health-management-backend-production.up.railway.app",
+
   "dependencies": {
 
     "@testing-library/dom": "^10.4.1",
