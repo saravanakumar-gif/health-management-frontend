@@ -1,13 +1,34 @@
 import axios from 'axios';
 
-// Browser calls stay same-origin (e.g. Vercel → /api/... → Railway via vercel.json rewrite, or
-// CRA dev server proxy) so CORS is not required on the backend for the frontend origin.
-// Set REACT_APP_API_URL to the full Railway API URL only if you fix CORS on the backend instead.
-const API_BASE_URL =
-    process.env.REACT_APP_API_URL || '/api';
+/**
+ * Use same-origin `/api` when the env URL points at another host (e.g. Railway). That avoids CORS
+ * because Vercel rewrites `/api/*` → Railway (see vercel.json) and CRA `proxy` does the same in dev.
+ * If REACT_APP_API_URL is set on Vercel to the full Railway URL, it would otherwise be baked into
+ * the bundle and the browser would still hit Railway directly → CORS errors.
+ */
+function resolveApiBaseUrl() {
+    const fromEnv = process.env.REACT_APP_API_URL;
+    if (!fromEnv || fromEnv === '/api') {
+        return '/api';
+    }
+    if (fromEnv.startsWith('/')) {
+        return fromEnv;
+    }
+    if (typeof window !== 'undefined') {
+        try {
+            const parsed = new URL(fromEnv);
+            if (parsed.origin === window.location.origin) {
+                return fromEnv;
+            }
+        } catch {
+            return '/api';
+        }
+    }
+    return '/api';
+}
 
 const api = axios.create({
-    baseURL: API_BASE_URL,
+    baseURL: resolveApiBaseUrl(),
     headers: {
         'Content-Type': 'application/json',
     },
