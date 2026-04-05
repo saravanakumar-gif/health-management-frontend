@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react';
 import {  useNavigate, useParams } from 'react-router-dom'
 import doctorService from'../Services/doctorService';
 import'../Styles/DoctorForm.css';
@@ -37,32 +37,33 @@ const DoctorForm = () => {
         'Other',
   ];
 
-  useEffect(()=>{
-    if(isEditMode){
-        fetchDoctor();
+  const fetchDoctor = useCallback(async () => {
+    if (!id) return;
+    try {
+      setLoading(true);
+      const data = await doctorService.getDoctorById(id);
+      setFormData({
+        name: data.name,
+        specialization: data.specialization,
+        qualification: data.qualification || '',
+        experience: data.experience || '',
+        phone: data.phone,
+        email: data.email || '',
+        consultationFee: data.consultationFee || '',
+      });
+    } catch (err) {
+      setError('Failed to load doctor details');
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
-  },[id ,isEditMode]);
+  }, [id]);
 
-  const fetchDoctor=async()=>{
-    try{
-        setLoading(true);
-        const data=await doctorService.getDoctorById(id);
-        setFormData({
-            name:data.name,
-            specialization:data.specialization,
-            qualification:data.qualification || '',
-            experience:data.experience ||'',
-            phone:data.phone,
-            email:data.email||'',
-            consultationFee: data.consultationFee ||'',
-        });
-    } catch (err){
-        setError('Failed to load doctor details')
-        console.error(err);
-    }finally{
-        setLoading(false);
+  useEffect(() => {
+    if (isEditMode) {
+      fetchDoctor();
     }
-  };
+  }, [isEditMode, fetchDoctor]);
 
   const handleChange=(e)=>{
     setFormData({

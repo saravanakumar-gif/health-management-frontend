@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify';
 import patientService from'../Services/patientService';
@@ -21,32 +21,31 @@ const PatientForm = () => {
     const[loading,setLoading]=useState(false);
     const[error,setError]=useState('');
 
-    useEffect(()=>{
-        if(isEditMode){
-            fetchPatient();
-        }
-    },[id, isEditMode]);
-
-    const fetchPatient=async ()=>{
-        try{
+    const fetchPatient = useCallback(async () => {
+        if (!id) return;
+        try {
             setLoading(true);
-            const data=await patientService.getPatientById(id);
+            const data = await patientService.getPatientById(id);
             setFormData({
-                name:data.name,
-                age:data.age||'',
-                gender:data.gender||'Male',
-                phone:data.phone,
-                address:data.address||'',
+                name: data.name,
+                age: data.age || '',
+                gender: data.gender || 'Male',
+                phone: data.phone,
+                address: data.address || '',
             });
-        }
-        catch (err){
+        } catch (err) {
             setError('Failed to load patient details');
             console.error(err);
-        }
-        finally{
+        } finally {
             setLoading(false);
         }
-    };
+    }, [id]);
+
+    useEffect(() => {
+        if (isEditMode) {
+            fetchPatient();
+        }
+    }, [isEditMode, fetchPatient]);
 
     const handleChange=(e)=>{
         setFormData({

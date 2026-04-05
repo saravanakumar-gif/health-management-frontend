@@ -44,7 +44,8 @@ const PatientList = () => {
         setShowDeleteModal(true);
     };
 
-    const confirmDelete = async (id) => {
+    const confirmDelete = async () => {
+        if (!patientToDelete?.id) return;
         try {
             await patientService.deletePatient(patientToDelete.id);
             await fetchPatients();

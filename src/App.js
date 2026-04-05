@@ -35,12 +35,18 @@ function App() {
       <Route path='/appointments/edit/:id' element={<AppointmentForm/>}></Route>
 
     </Routes>
-    <ToastContainer position="top-right"
-    autoClose={3000}
-    hideProgressBar={false}
-    newestOnTop={false}
-    closeOnClick rtl={false}
-    pauseOnFoucsLoss draggable pasuseOnHover theme={"colored"}/>
+    <ToastContainer
+      position="top-right"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="colored"
+    />
       
     </BrowserRouter>
   );

@@ -12,7 +12,7 @@ const DoctorList = () => {
     const [error, setError] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [filterSpecialization, setFilterSpecialization] = useState('All');
-    const[showDeletModel,setShowDeleteModal]=useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const[doctorToDelete,setDoctorToDelete]=useState(null);
     const navigate = useNavigate();
 
@@ -34,40 +34,29 @@ const DoctorList = () => {
         }
     };
 
-    const handleDelete = async (id) => {
-    
-        const doctor = doctors.find(d => d.id === id);
-        
-        if (window.confirm(`Are you sure you want to delete Dr. ${doctor?.name}? This will also delete all their appointments.`)) {
-            try {
-                await doctorService.deleteDoctor(id);
-                await fetchDoctors(); 
-                alert('Doctor and associated appointments deleted successfully!');
-            } catch (err) {
-                const errorMessage = err.response?.data?.error || err.response?.data?.message || 'Failed to delete doctor';
-                alert(errorMessage);
-                console.error(err);
-            }
-        }
-    };
-
-    const handleDeleteClick=(doctor)=>{
+    const handleDeleteClick = (doctor) => {
         setDoctorToDelete(doctor);
         setShowDeleteModal(true);
     };
 
-    const confirmDelete=async()=>{
-        try{
+    const confirmDelete = async () => {
+        if (!doctorToDelete?.id) return;
+        try {
             await doctorService.deleteDoctor(doctorToDelete.id);
             await fetchDoctors();
-            toast.success('Doctor deleted successfully!')
-        }catch(err){
-            toast.error('Failed to delete doctor')
-        }finally{
+            toast.success('Doctor and associated appointments deleted successfully!');
+        } catch (err) {
+            const msg =
+                err.response?.data?.error ||
+                err.response?.data?.message ||
+                'Failed to delete doctor';
+            toast.error(msg);
+            console.error(err);
+        } finally {
             setShowDeleteModal(false);
             setDoctorToDelete(null);
         }
-    }
+    };
 
     const specializations = ['All', ...new Set(doctors.map(d => d.specialization))];
 
@@ -185,8 +174,13 @@ const DoctorList = () => {
                     )}
                 </div>
             )}
-            <ConfirmModal isOpen={showDeletModel} title="Delete Doctor" message={`Are you sure you want to delete Dr.${doctorToDelete?.name}? This will also delete all their appointments.`} 
-        onConfirm={confirmDelete} onCancel={()=>setShowDeleteModal(false)}/>
+            <ConfirmModal
+                isOpen={showDeleteModal}
+                title="Delete Doctor"
+                message={`Are you sure you want to delete Dr. ${doctorToDelete?.name}? This will also delete all their appointments.`}
+                onConfirm={confirmDelete}
+                onCancel={() => setShowDeleteModal(false)}
+            />
 
             <div className='footer-actions'>
                 <button className='btn-back' onClick={() => navigate('/dashboard')}>

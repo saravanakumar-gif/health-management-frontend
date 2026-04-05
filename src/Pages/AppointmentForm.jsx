@@ -1,11 +1,9 @@
-import React, { useEffect, useReducer } from 'react'
-import{ useNavigate,useParams} from'react-router-dom';
-import appointmentService from'../Services/appointmentService';
-import patientService from'../Services/patientService';
-import doctorService from'../Services/doctorService';
-import'../Styles/AppointmentForm.css';
-
-const AppointmentForm = () => {
+import React, { useCallback, useEffect, useReducer } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import appointmentService from '../Services/appointmentService';
+import patientService from '../Services/patientService';
+import doctorService from '../Services/doctorService';
+import '../Styles/AppointmentForm.css';
 
 const formReducer = (state, action) => {
     switch (action.type) {
@@ -54,20 +52,14 @@ const initialState = {
     error: '',
 };
 
-const { id } = useParams();
+const AppointmentForm = () => {
+    const { id } = useParams();
     const navigate = useNavigate();
     const isEditMode = Boolean(id);
 
     const [state, dispatch] = useReducer(formReducer, initialState);
 
-    useEffect(() => {
-        fetchPatientsAndDoctors();
-        if (isEditMode) {
-            fetchAppointment();
-        }
-    }, [id,isEditMode]);
-
-    const fetchPatientsAndDoctors = async () => {
+    const fetchPatientsAndDoctors = useCallback(async () => {
         try {
             const [patientsData, doctorsData] = await Promise.all([
                 patientService.getAllPatients(),
@@ -79,13 +71,14 @@ const { id } = useParams();
         } catch (err) {
             dispatch({ type: 'SET_ERROR', value: 'Failed to load patients and doctors' });
         }
-    };
+    }, []);
 
-    const fetchAppointment = async () => {
+    const fetchAppointment = useCallback(async () => {
+        if (!id) return;
         try {
             dispatch({ type: 'SET_LOADING', value: true });
             const data = await appointmentService.getAppointmentById(id);
-            
+
             dispatch({
                 type: 'LOAD_APPOINTMENT',
                 data: {
@@ -100,13 +93,19 @@ const { id } = useParams();
         } catch (err) {
             dispatch({ type: 'SET_ERROR', value: 'Failed to load appointment' });
         }
-    };
+    }, [id]);
+
+    useEffect(() => {
+        fetchPatientsAndDoctors();
+        if (isEditMode) {
+            fetchAppointment();
+        }
+    }, [id, isEditMode, fetchPatientsAndDoctors, fetchAppointment]);
 
     const handleChange = (field, value) => {
         dispatch({ type: 'SET_FIELD', field, value });
 
         if (field === 'patient') {
-            
             dispatch({ type: 'SET_FILTERED_DOCTORS', data: state.doctors });
         }
     };
@@ -116,7 +115,6 @@ const { id } = useParams();
         dispatch({ type: 'SET_ERROR', value: '' });
         dispatch({ type: 'SET_LOADING', value: true });
 
-        
         if (!state.formData.patient.id || !state.formData.doctor.id) {
             dispatch({ type: 'SET_ERROR', value: 'Please select both patient and doctor' });
             dispatch({ type: 'SET_LOADING', value: false });
@@ -125,8 +123,8 @@ const { id } = useParams();
 
         try {
             const appointmentData = {
-                patient: { id: parseInt(state.formData.patient.id) },
-                doctor: { id: parseInt(state.formData.doctor.id) },
+                patient: { id: parseInt(state.formData.patient.id, 10) },
+                doctor: { id: parseInt(state.formData.doctor.id, 10) },
                 appointmentDate: state.formData.appointmentDate,
                 appointmentTime: state.formData.appointmentTime,
                 reason: state.formData.reason,
@@ -151,15 +149,12 @@ const { id } = useParams();
         }
     };
 
-    
     const getMinDate = () => {
         const today = new Date();
         return today.toISOString().split('T')[0];
     };
 
-
-
-     return (
+    return (
         <div className="form-container">
             <div className="form-card appointment-form-card">
                 <h1>{isEditMode ? 'Edit Appointment' : 'Book Appointment'}</h1>
@@ -175,7 +170,7 @@ const { id } = useParams();
                             required
                         >
                             <option value="">Choose a patient...</option>
-                            {state.patients.map(patient => (
+                            {state.patients.map((patient) => (
                                 <option key={patient.id} value={patient.id}>
                                     {patient.name} - {patient.phone}
                                 </option>
@@ -183,8 +178,9 @@ const { id } = useParams();
                         </select>
                         {state.patients.length === 0 && (
                             <small className="help-text">
-                                No patients found. <span 
-                                    className="link" 
+                                No patients found.{' '}
+                                <span
+                                    className="link"
                                     onClick={() => navigate('/patients/add')}
                                 >
                                     Add a patient first
@@ -201,7 +197,7 @@ const { id } = useParams();
                             required
                         >
                             <option value="">Choose a doctor...</option>
-                            {state.filteredDoctors.map(doctor => (
+                            {state.filteredDoctors.map((doctor) => (
                                 <option key={doctor.id} value={doctor.id}>
                                     {doctor.name} - {doctor.specialization} (₹{doctor.consultationFee})
                                 </option>
@@ -209,8 +205,9 @@ const { id } = useParams();
                         </select>
                         {state.doctors.length === 0 && (
                             <small className="help-text">
-                                No doctors found. <span 
-                                    className="link" 
+                                No doctors found.{' '}
+                                <span
+                                    className="link"
                                     onClick={() => navigate('/doctors/add')}
                                 >
                                     Add a doctor first
@@ -249,7 +246,7 @@ const { id } = useParams();
                             onChange={(e) => handleChange('reason', e.target.value)}
                             placeholder="Describe the reason for appointment..."
                             rows="3"
-                            
+                            required
                         />
                     </div>
 
@@ -271,22 +268,22 @@ const { id } = useParams();
                         >
                             Cancel
                         </button>
-                        <button 
-                            type="submit" 
-                            className="btn-submit" 
+                        <button
+                            type="submit"
+                            className="btn-submit"
                             disabled={state.loading}
                         >
-                            {state.loading 
-                                ? 'Saving...' 
-                                : isEditMode 
-                                ? 'Update Appointment' 
-                                : 'Book Appointment'}
+                            {state.loading
+                                ? 'Saving...'
+                                : isEditMode
+                                  ? 'Update Appointment'
+                                  : 'Book Appointment'}
                         </button>
                     </div>
                 </form>
             </div>
         </div>
     );
-}
+};
 
-export default AppointmentForm
+export default AppointmentForm;
