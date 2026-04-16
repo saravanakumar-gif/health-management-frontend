@@ -1,94 +1,107 @@
-# Health Management Frontend
-#Purpose and Scope
+# 🏥 Health Management System - Frontend
 
-This document provides a high-level introduction to the health-management-frontend application, describing its purpose, architecture, and core functional areas. The application is a React-based single-page application (SPA) for managing healthcare operations including patient records, doctor profiles, and appointment scheduling.
+## 📌 Description
 
-#Application Purpose
+This project is the frontend of the Health Management System. It provides a responsive and user-friendly interface for managing patients, doctors, appointments, and medical records.
 
-The health-management-frontend is a web-based medical management system that provides a unified interface for healthcare facility operations. The application serves as the client-side component of a full-stack healthcare management solution, communicating with a backend API hosted on Railway.
+The frontend communicates with the backend REST APIs to display and manage healthcare data efficiently.
 
-#Technology Stack
+---
 
-The application is built using modern web development technologies centered around the React ecosystem:
+## 🛠️ Tech Stack
 
-| Technology                | Version   | Purpose                              |
-|---------------------------|-----------|--------------------------------------|
-| react                     | 19.2.3    | Core UI library                      |
-| react-dom                 | 19.2.3    | React rendering to DOM               |
-| react-router-dom          | 7.12.0    | Client-side routing                  |
-| axios                     | 1.13.2    | HTTP client for API communication    |
-| bootstrap                 | 5.3.8     | UI styling and components            |
-| react-scripts             | 5.0.1     | Build tooling and webpack config     |
-| @testing-library/react    | 16.3.2    | Component testing utilities          |
+* Frontend: React.js
+* Styling: CSS / Bootstrap / Tailwind (update if used)
+* Language: JavaScript
+* API Calls: Axios / Fetch
 
+---
 
+## ✨ Features
 
-#Application Architecture Diagram
+* 👤 Patient Management UI
+* 👨‍⚕️ Doctor Management Interface
+* 📅 Appointment Booking UI
+* 🗂️ Medical Records View
+* 🔄 CRUD Operations UI
+* 📱 Responsive Design
 
-                                    ┌───────────────────────────────┐
-                                    │        Browser Environment    │
-                                    │                               │
-                                    │   index.html                  │
-                                    │     (Entry Point)             │
-                                    │                               │
-                                    └───────────────┬───────────────┘
-                                                    │
-                                                    ▼
-                                    ┌───────────────────────────────┐
-                                    │        React Mount Point      │
-                                    │          <div id="root">      │
-                                    └───────────────┬───────────────┘
-                                                    │
-                                                    ▼
-                          ┌───────────────────────────────────────┐
-                          │            React Application          │
-                          │                                       │
-                          │          App.js                       │
-                          │     • BrowserRouter                   │
-                          │     • Routes / Route configuration    │
-                          └───────────────────┬───────────────────┘
-                                              │
-                ┌─────────────────────────────┼─────────────────────────────┐
-                │                             │                             │
-    ┌───────────┴───────────┐     ┌───────────┴───────────┐     ┌───────────┴───────────┐
-    │     Public Pages      │     │    Protected Pages    │     │     Form Pages        │
-    │                       │     │                       │     │                       │
-    │  • Login              │     │  • Dashboard          │     │  • PatientForm        │
-    │  • Register           │     │  • PatientList        │     │  • DoctorForm         │
-    │                       │     │  • DoctorList         │     │  • AppointmentForm    │
-    └───────────┬───────────┘     └───────────┬───────────┘     └───────────┬───────────┘
-                │                             │                             │
-                └───────────────┬─────────────┼─────────────┬───────────────┘
-                                │             │             │
-                                ▼             ▼             ▼
-                    ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
-                    │   Service Layer │ │                 │ │                 │
-                    │                 │ │                 │ │                 │
-                    │  • authService  │ │  patientService │ │  doctorService  │
-                    │  • (login,      │ │  • (CRUD        │ │  • (CRUD        │
-                    │     register,   │ │     patients)   │ │     doctors)    │
-                    │     logout, etc)│ │                 │ │                 │
-                    └────────┬────────┘ └────────┬────────┘ └────────┬────────┘
-                             │                   │                   │
-                             └───────────┬───────┼───────────┬───────┘
-                                         │       │           │
-                                         ▼       ▼           ▼
-                               ┌───────────────────────────────────┐
-                               │            api.js                 │
-                               │     (Central Axios Instance)      │
-                               │  • baseURL                        │
-                               │  • interceptors (auth token, etc) │
-                               │  • request/response handling      │
-                               └───────────────────┬───────────────┘
-                                                   │
-                                                   ▼
-                                     ┌─────────────────────────────┐
-                                     │     Backend API             │
-                                     │  (Railway hosted)           │
-                                     │  health-management-backend  │
-                                     └─────────────────────────────┘
-                                     
+---
 
+## 📂 Project Structure
 
-Backend:https://github.com/saravanakumar-gif/health-management-backend.git
-                                     
+```bash
+health-management-frontend/
+│── src/
+│── public/
+│── components/
+│── pages/
+│── package.json
+```
+
+---
+
+## ⚙️ Installation
+
+### 1️⃣ Clone Repository
+
+```bash
+git clone https://github.com/saravanakumar-gif/health-management-frontend.git
+cd health-management-frontend
+```
+
+### 2️⃣ Install Dependencies
+
+```bash
+npm install
+```
+
+### 3️⃣ Run Application
+
+```bash
+npm run dev
+```
+
+---
+
+## 🚀 Usage
+
+Open browser:
+http://localhost:5173
+
+---
+
+## 🔗 Backend Repository
+
+https://github.com/saravanakumar-gif/health-management-backend
+
+---
+
+## 📸 Screenshots
+
+### 🏠 Home Page
+
+![Home](screenshots/home.png)
+
+### 👤 Patient Page
+
+![Patient](screenshots/patient.png)
+
+### 📅 Appointment Page
+
+![Appointment](screenshots/appointment.png)
+
+---
+
+## 🧪 Testing
+
+You can test UI and API integration using:
+
+* Browser
+* Postman (for backend APIs)
+
+---
+
+## 👨‍💻 Author
+
+Saravanakumar
